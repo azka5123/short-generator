@@ -59,6 +59,7 @@ final_clip.write_videofile(
     codec='libx264',
     audio_codec='aac',
     threads=4,
+    preset='slow',
 )
 
 # 9. Bersihkan file TTS temporary
