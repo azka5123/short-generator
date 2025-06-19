@@ -1,0 +1,7 @@
+/venv
+/raw_vidio/*
+/result/*
+
+*.mp3
+*.wav
+*.mp4
