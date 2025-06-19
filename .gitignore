@@ -1,6 +1,6 @@
 /venv
-/raw_vidio/*
-/result/*
+raw_vidio/*
+result/*
 
 *.mp3
 *.wav
