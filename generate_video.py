@@ -79,7 +79,7 @@ bg_clip = bg_clip.resized(height=VIDEO_SIZE[1], width=VIDEO_SIZE[0])
 # 6 Potong durasi agar sama dengan audio
 max_start = bg_clip.duration - audio_duration
 start_time = random.uniform(0, max_start)
-bg_clip = bg_clip.subclip(start_time, start_time + audio_clip.duration)
+bg_clip = bg_clip.subclipped(start_time, start_time + audio_clip.duration)
 
 # 7. Gabungkan semua (video + text + audio)
 final_clip = CompositeVideoClip([bg_clip])
