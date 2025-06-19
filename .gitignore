@@ -1,6 +1,10 @@
 /venv
+
 raw_vidio/*
+!/raw_vidio/.gitkeep
+
 result/*
+!/result/.gitkeep
 
 *.mp3
 *.wav
