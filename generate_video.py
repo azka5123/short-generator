@@ -8,7 +8,7 @@ import random
 SOURCE_FILE = 'source.txt'
 RAW_VIDEO_FOLDER = 'raw_vidio'
 TTS_AUDIO = 'tts_output.mp3'
-VIDEO_SIZE = (720, 1280)  # TikTok Portrait Mode
+VIDEO_SIZE = (1080, 1920)  # TikTok Portrait Mode
 
 # 1. Baca text dari source.txt dan buat judul vidio
 with open(SOURCE_FILE, 'r', encoding='utf-8') as f:
@@ -41,7 +41,7 @@ selected_video = os.path.join(RAW_VIDEO_FOLDER, random.choice(video_files))
 bg_clip = VideoFileClip(selected_video)
 
 # 5 Resize ke TikTok Portrait Mode (9:16)
-bg_clip = bg_clip.resized(height=VIDEO_SIZE[1])
+bg_clip = bg_clip.resized(height=VIDEO_SIZE[1], width=VIDEO_SIZE[0])
 
 # 6 Potong durasi agar sama dengan audio
 max_start = bg_clip.duration - audio_duration
@@ -53,7 +53,13 @@ final_clip = CompositeVideoClip([bg_clip])
 final_clip = final_clip.with_audio(audio_clip)
 
 # 8. Export video
-final_clip.write_videofile(OUTPUT_FILE, fps=24)
+final_clip.write_videofile(
+    OUTPUT_FILE,
+    fps=30,
+    codec='libx264',
+    audio_codec='aac',
+    threads=4,
+)
 
 # 9. Bersihkan file TTS temporary
 os.remove(TTS_AUDIO)
