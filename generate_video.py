@@ -49,8 +49,13 @@ response = client.models.generate_content(
 generated_text = response.text
 
 # generated_text ="""
-# testting upload googole drive
-#testing 123
+# The Whisper in My Closet
+# I’ve never told anyone this before. Two weeks ago, every night, 
+# I heard a faint whisper coming from my closet—soft, low, like someone calling my name.
+#  At first, I thought it was just mice, but the voice was too clear. 
+#  One night, I gathered my courage and opened the closet... nothing was there. 
+#  But after that, the whisper moved. Now, every night, I hear it right by my ear, even though my room is always locked. 
+#  Yesterday, I recorded the sound. When I played it back, I heard a faint voice whispering: “I’m right behind you.”
 # """
 
 lines = generated_text.strip().split('\n')
@@ -61,7 +66,7 @@ OUTPUT_FILE = 'result/' + title + ".mp4"
 
 # 2. Generate TTS pakai pyttsx3
 async def generate_tts(text, filename):
-    voices = ["en-US-GuyNeural", "en-US-JennyNeural"]  
+    voices = ["en-US-GuyNeural", "en-US-JennyNeural","en-US-AriaNeural","en-IE-ConnorNeural"]  
     selected_voice = random.choice(voices)
     print(f"🔊 Voice terpilih: {selected_voice}") 
     communicate = edge_tts.Communicate(text=text, voice=selected_voice, rate="+15%") 
