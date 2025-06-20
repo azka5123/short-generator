@@ -4,11 +4,13 @@ from moviepy import *
 import os
 import random
 from google import genai
+import subprocess
 
 # Config
 RAW_VIDEO_FOLDER = 'raw_vidio'
 TTS_AUDIO = 'tts_output.mp3'
 VIDEO_SIZE = (1080, 1920)  # TikTok Portrait Mode
+GDRIVE_FOLDER = 'gdrive:story'  # Rclone remote:path
 
 # 1. Generate story
 client = genai.Client(api_key=os.getenv('GEMINI_API'))
@@ -45,6 +47,11 @@ response = client.models.generate_content(
 )
 
 generated_text = response.text
+
+# generated_text ="""
+# testting upload googole drive
+#testing 123
+# """
 
 lines = generated_text.strip().split('\n')
 title = lines[0].strip()               
@@ -99,3 +106,11 @@ final_clip.write_videofile(
 os.remove(TTS_AUDIO)
 
 print("✅ Video berhasil dibuat:", OUTPUT_FILE)
+
+# 10. Upload ke Google Drive via rclone
+try:
+    print("🚀 Mengunggah ke Google Drive...")
+    subprocess.run(['rclone', 'copy', OUTPUT_FILE, GDRIVE_FOLDER], check=True)
+    print("✅ Upload ke Google Drive selesai.")
+except subprocess.CalledProcessError as e:
+    print("❌ Gagal upload ke Google Drive:", e)
