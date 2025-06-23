@@ -18,46 +18,46 @@ FONTS = "fonts/dejavu-sans/DejaVuSans.ttf"
 TTS_SUBTITLE = "tts_output.srt"
 
 # 1. Generate story
-# client = genai.Client(api_key=os.getenv('GEMINI_API'))
-# prompt = """
-# Write an original short story in the style of a Reddit post from the r/nosleep or r/confession subreddit.
+client = genai.Client(api_key=os.getenv('GEMINI_API'))
+prompt = """
+Write an original short story in the style of a Reddit post from the r/nosleep or r/confession subreddit.
 
-# Important rules:
-# - The story title MUST be written as the first line of the output. 
-# - The title must be 5 to 8 words long and provide a clear, interesting summary of the story.
-# - After the title, write the story starting from a casual opening sentence like: ‘I’ve never told anyone this before…’ or ‘This happened to me last summer…’.
-# - Do NOT put the title in quotation marks or any special format. Just plain text.
-# - Example of title placement:
-#   My Strange Neighbor Who Talks to Dolls
-#   I’ve never told anyone this before, but when I moved to...
+Important rules:
+- The story title MUST be written as the first line of the output. 
+- The title must be 5 to 8 words long and provide a clear, interesting summary of the story.
+- After the title, write the story starting from a casual opening sentence like: ‘I’ve never told anyone this before…’ or ‘This happened to me last summer…’.
+- Do NOT put the title in quotation marks or any special format. Just plain text.
+- Example of title placement:
+  My Strange Neighbor Who Talks to Dolls
+  I’ve never told anyone this before, but when I moved to...
 
-# Story rules:
-# - The story must be between 200 to 500 words.
-# - Use first-person perspective.
-# - Build suspense gradually with odd or unexplained details.
-# - The story must have a clear and complete ending, without any cliffhangers or unresolved mysteries.
+Story rules:
+- The story must be between 200 to 500 words.
+- Use first-person perspective.
+- Build suspense gradually with odd or unexplained details.
+- The story must have a clear and complete ending, without any cliffhangers or unresolved mysteries.
 
-# Content restrictions:
-# - Avoid gore, violence, explicit content, abuse, self-harm, suicide, and illegal activities.
-# - Avoid religious, political, or real-world controversial topics.
-# - Must be appropriate for social media platforms like TikTok, YouTube, and Instagram.
-# - Mystery, horror, or supernatural elements should focus on psychological tension, strange coincidences, or unexplained but harmless phenomena.
+Content restrictions:
+- Avoid gore, violence, explicit content, abuse, self-harm, suicide, and illegal activities.
+- Avoid religious, political, or real-world controversial topics.
+- Must be appropriate for social media platforms like TikTok, YouTube, and Instagram.
+- Mystery, horror, or supernatural elements should focus on psychological tension, strange coincidences, or unexplained but harmless phenomena.
 
-# End the story with a clear and satisfying resolution.
-# """
-
-# response = client.models.generate_content(
-#     model="gemini-2.5-flash",
-#     contents=prompt
-# )
-
-# generated_text = response.text
-
-generated_text ="""
-The Whisper in My Closet
-I’ve never told anyone this before. Two weeks ago, every night, 
-I heard a faint whisper coming from my closet—soft, low, like someone calling my name.
+End the story with a clear and satisfying resolution.
 """
+
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents=prompt
+)
+
+generated_text = response.text
+
+# generated_text ="""
+# The Whisper in My Closet
+# I’ve never told anyone this before. Two weeks ago, every night, 
+# I heard a faint whisper coming from my closet—soft, low, like someone calling my name.
+# """
 
 lines = generated_text.strip().split('\n')
 title = lines[0].strip()               
@@ -146,19 +146,19 @@ final_clip.write_videofile(
 print("✅ Video berhasil dibuat:", OUTPUT_FILE)
 
 # 9. Upload To Google Drive via rclone
-# try:
-#     print("🚀 Mengunggah ke Google Drive...")
-#     subprocess.run(['rclone', 'copy', OUTPUT_FILE, GDRIVE_FOLDER], check=True)
-#     print("✅ Upload ke Google Drive selesai.")
-# except subprocess.CalledProcessError as e:
-#     print("❌ Gagal upload ke Google Drive:", e)
+try:
+    print("🚀 Mengunggah ke Google Drive...")
+    subprocess.run(['rclone', 'copy', OUTPUT_FILE, GDRIVE_FOLDER], check=True)
+    print("✅ Upload ke Google Drive selesai.")
+except subprocess.CalledProcessError as e:
+    print("❌ Gagal upload ke Google Drive:", e)
 
 # 10. Upload To YouTube
 deskripsi = "#story #storytime #reddit #redditstories #fyp"
-# start_async_upload(OUTPUT_FILE, title, deskripsi)
+start_async_upload(OUTPUT_FILE, title, deskripsi)
 # start_async_upload("result/testing.mp4", "Testing", deskripsi)
 
 #11. Delete File Video, TTS Temporary And Subtitle File
-# os.remove(OUTPUT_FILE)
+os.remove(OUTPUT_FILE)
 os.remove(TTS_AUDIO)
 os.remove(TTS_SUBTITLE)
