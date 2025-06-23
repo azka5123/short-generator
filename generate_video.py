@@ -20,30 +20,45 @@ TTS_SUBTITLE = "tts_output.srt"
 # 1. Generate story
 client = genai.Client(api_key=os.getenv('GEMINI_API'))
 prompt = """
-Write an original short story in the style of a Reddit post from the r/nosleep or r/confession subreddit.
+Write an original short story in the style of a Reddit post from one of the following subreddit communities:
 
-Important rules:
-- The story title MUST be written as the first line of the output. 
-- The title must be 5 to 8 words long and provide a clear, interesting summary of the story.
-- After the title, write the story starting from a casual opening sentence like: ‘I’ve never told anyone this before…’ or ‘This happened to me last summer…’.
-- Do NOT put the title in quotation marks or any special format. Just plain text.
-- Example of title placement:
-  My Strange Neighbor Who Talks to Dolls
-  I’ve never told anyone this before, but when I moved to...
+**Choose ONE genre/subreddit style:**
+- **r/nosleep** (Horror/Mystery): Psychological tension, supernatural elements, unexplained phenomena
+- **r/confession** (Drama/Personal): Raw honesty, life-changing moments, moral dilemmas
+- **r/tifu** (Comedy): Self-deprecating humor, embarrassing situations, comedic timing
+- **r/wholesomememes** (Heartwarming): Feel-good stories, human kindness, positive outcomes
+- **r/relationships** (Romance/Drama): Relationship dynamics, emotional growth, human connections
 
-Story rules:
-- The story must be between 200 to 500 words.
-- Use first-person perspective.
-- Build suspense gradually with odd or unexplained details.
-- The story must have a clear and complete ending, without any cliffhangers or unresolved mysteries.
+## Format Requirements:
+- The story title MUST be written as the first line of the output
+- Title must be 5 to 8 words long and match your chosen genre
+- After the title, start with an appropriate opening for your chosen subreddit:
+  - r/nosleep: "I've never told anyone this before..." 
+  - r/confession: "I need to get this off my chest..."
+  - r/tifu: "This happened yesterday and I'm still cringing..."
+  - r/wholesomememes: "Something beautiful happened to me today..."
+  - r/relationships: "I never expected this person to change my life..."
+- Do NOT put the title in quotation marks
 
-Content restrictions:
-- Avoid gore, violence, explicit content, abuse, self-harm, suicide, and illegal activities.
-- Avoid religious, political, or real-world controversial topics.
-- Must be appropriate for social media platforms like TikTok, YouTube, and Instagram.
-- Mystery, horror, or supernatural elements should focus on psychological tension, strange coincidences, or unexplained but harmless phenomena.
+## Story Requirements:
+- 200-500 words
+- First-person perspective
+- Match the tone and style expectations of your chosen subreddit
+- Build appropriate emotional arc for the genre (suspense, humor, warmth, etc.)
+- **Must have a clear, complete ending with resolution**
 
-End the story with a clear and satisfying resolution.
+## Content Guidelines:
+- Appropriate for social media platforms (TikTok, YouTube, Instagram)
+- Avoid: gore, violence, explicit content, abuse, self-harm, illegal activities
+- Avoid: religious, political, or controversial real-world topics
+- Focus on: psychological elements, human emotions, relatable experiences, universal themes
+
+## Genre-Specific Tips:
+- **Horror/Mystery**: Build tension through atmosphere and psychological elements rather than violence
+- **Comedy**: Use timing, relatability, and self-awareness for humor
+- **Romance**: Focus on emotional connection and character development
+- **Drama**: Explore authentic human experiences and personal growth
+- **Heartwarming**: Highlight human kindness and positive human nature
 """
 
 response = client.models.generate_content(
