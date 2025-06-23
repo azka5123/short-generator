@@ -52,12 +52,16 @@ def get_service(credential_path, port = 8080):
         with open(TOKEN_FILE, "w") as f:
             f.write(creds.to_json())
 
-    email = get_account_info(creds)
+    files = os.listdir(credential_path)
+    email_files = [f for f in files if "@" in f]  # search file has '@'
 
-    # make empty file for email
-    email_file_path = os.path.join(credential_path, email)
-    if not os.path.exists(email_file_path):
-        open(email_file_path, 'w').close() 
+    if email_files:
+        email = email_files[0]
+    else:
+        email = get_account_info(creds)
+        email_file_path = os.path.join(credential_path, email)
+        if not os.path.exists(email_file_path):
+            open(email_file_path, 'w').close() 
 
     return build("youtube", "v3", credentials=creds), email
 
