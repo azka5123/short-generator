@@ -80,7 +80,7 @@ text = title + '\n' + '\n'.join(lines[1:]).strip()
 
 OUTPUT_FILE = 'result/' + title + ".mp4"
 
-# 2. Generate TTS Using pyttsx3
+# 2. Generate TTS And Subtitle Using pyttsx3
 async def generate_tts(text, filename, subtitle):
     voices = ["en-US-GuyNeural", "en-US-JennyNeural", "en-US-AriaNeural", "en-IE-ConnorNeural"]  
     selected_voice = random.choice(voices)
@@ -120,7 +120,7 @@ max_start = bg_clip.duration - audio_duration
 start_time = random.uniform(0, max_start)
 bg_clip = bg_clip.subclipped(start_time, start_time + audio_clip.duration)
 
-# 6. Generate subtitles
+# 6. Load Subtitle From SRT File
 subs = pysrt.open(TTS_SUBTITLE)
 
 subtitles = []
@@ -145,11 +145,11 @@ for sub in subs:
               
     subtitles.append(txt_clip.with_position(text_position))
 
-# 6. Combine All (video + text + audio)
+# 7. Combine All (video + subtitle + audio)
 final_clip = CompositeVideoClip([bg_clip, *subtitles])
 final_clip = final_clip.with_audio(audio_clip)
 
-# 7. Export video
+# 8. Export video
 final_clip.write_videofile(
     OUTPUT_FILE,
     fps=30,
