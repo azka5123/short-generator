@@ -4,12 +4,15 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
 import os
 import shutil
 
 SCOPES = [
     "https://www.googleapis.com/auth/youtube.upload",
     "https://www.googleapis.com/auth/userinfo.profile",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "openid"
 ]
 YT_ACC = int(os.getenv("YT_ACC", 1))
 MAX_WORKERS = int(os.getenv("YT_WORKER", 1))
@@ -22,6 +25,7 @@ def get_account_info(creds):
             personFields='emailAddresses'
         ).execute()
         emails = profile.get('emailAddresses', [])
+        print(profile)
         if emails:
             return emails[0].get('value')
         else:
@@ -40,7 +44,7 @@ def get_service(credential_path, port = 8080):
         creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh()
+            creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS, SCOPES)
             creds = flow.run_local_server(port=port)
@@ -85,19 +89,25 @@ def upload_to_youtube(credential_path, file, title, desc, privacy="public", cate
     request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
     response = None
     print(f"📹 Starting Upload To Youtube Channel (Credential: {credential_path})...")
-    while response is None:
-        status, response = request.next_chunk()
-        if status:
-            print(f"Upload Progress ({credential_path}): {int(status.progress() * 100)}%")
-    print(f"✅ Upload Success {credential_path}! Video ID: {response['id']}")
+    try:
+        while response is None:
+            status, response = request.next_chunk()
+            if status:
+                print(f"Upload Progress ({credential_path}): {int(status.progress() * 100)}%")
+        print(f"✅ Upload Success {credential_path}! Video ID: {response['id']}")
+    except Exception as e:
+        print(f"❌ Upload Failed {credential_path}: {e}")
+        raise 
 
 async def upload_task(executor, credential_path, video_path, title, description):
     loop = asyncio.get_event_loop()
     try:
         await loop.run_in_executor(executor, upload_to_youtube, credential_path, video_path, title, description)
     except Exception as e:
-        print(f"❌ Error upload {credential_path}: {e}")
-
+        if "uploadLimitExceeded" in str(e):
+            print(f"⚠️ Skipping {credential_path}: Upload Limit Exceeded")
+        else:
+            print(f"❌ Error upload {credential_path}: {e}")
 async def upload_to_all_channels_async(video_path, title, description):
     tasks = []
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
