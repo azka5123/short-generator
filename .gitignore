@@ -5,3 +5,11 @@
 *.mp4
 
 .env
+
+*.json
+
+*@*
+
+/tiktok_profile
+
+__pycache__
