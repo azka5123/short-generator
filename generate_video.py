@@ -8,6 +8,7 @@ import subprocess
 from upload_yt import start_async_upload 
 import re
 import pysrt
+from upload_tiktok import upload_tiktok
 
 # Config
 RAW_VIDEO_FOLDER = 'raw_vidio'
@@ -168,12 +169,16 @@ try:
 except subprocess.CalledProcessError as e:
     print("❌ Gagal upload ke Google Drive:", e)
 
-# 10. Upload To YouTube
+# # 10. Upload To YouTube
 deskripsi = "#story #storytime #reddit #redditstories #fyp"
 start_async_upload(OUTPUT_FILE, title, deskripsi)
-# start_async_upload("result/testing.mp4", "Testing", deskripsi)
+# # start_async_upload("result/testing.mp4", "Testing", deskripsi)
 
-#11. Delete File Video, TTS Temporary And Subtitle File
+# 11. Upload To Tiktok
+full_description = f"{title}\n{deskripsi}"
+upload_tiktok(OUTPUT_FILE, full_description)
+
+#12. Delete File Video, TTS Temporary And Subtitle File
 os.remove(OUTPUT_FILE)
 os.remove(TTS_AUDIO)
 os.remove(TTS_SUBTITLE)
