@@ -158,6 +158,7 @@ final_clip.write_videofile(
     audio_codec='aac',
     threads=4,
     preset='slow',
+    logger='none'
 )
 print("✅ Video berhasil dibuat:", OUTPUT_FILE)
 

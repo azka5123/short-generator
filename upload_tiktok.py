@@ -3,35 +3,60 @@ from tiktok_uploader.upload import upload_video
 
 def upload_tiktok(video_path: str, description: str, cookies_dir: str = 'tiktok_cookies'):
     """
-    Uploads the video to all TikTok accounts based on all cookies.txt files in the specified folder.
+    Mengunggah video ke semua akun TikTok berdasarkan file cookies.txt 
+    yang ada di dalam folder yang ditentukan.
 
-    :param video_path: Path to the video file (MP4)
-    :param description: TikTok video description
-    :param cookies_dir: Directory containing all TikTok account cookies files (default: 'tiktok_cookies')
+    :param video_path: Path ke file video (MP4).
+    :param description: Deskripsi untuk video TikTok.
+    :param cookies_dir: Direktori yang berisi file-file cookies akun TikTok (default: 'tiktok_cookies').
     """
 
-    # Cek apakah folder cookies ada
-    if not os.path.isdir(cookies_dir):
-        print(f"❌ Folder cookies '{cookies_dir}' tidak ditemukan!")
+    # 1. Verifikasi path video dan direktori cookies
+    if not os.path.exists(video_path):
+        print(f"❌ File video tidak ditemukan di: {video_path}")
         return
 
-    # Ambil semua file .txt di dalam folder cookies
+    if not os.path.isdir(cookies_dir):
+        print(f"❌ Direktori cookies tidak ditemukan di: '{cookies_dir}'")
+        return
+
+    # 2. Ambil semua file .txt di dalam folder cookies
     cookie_files = [f for f in os.listdir(cookies_dir) if f.endswith('.txt')]
 
     if not cookie_files:
-        print("❌ Tidak ada file cookie .txt ditemukan di folder cookies!")
+        print(f"ℹ️ Tidak ada file cookie (.txt) yang ditemukan di direktori '{cookies_dir}'.")
         return
 
-    # Upload ke setiap akun (cookie file)
+    print(f"🚀 Memulai proses unggah ke {len(cookie_files)} akun TikTok...")
+
+    # 3. Iterasi dan unggah untuk setiap file cookie
     for cookie_file in cookie_files:
         cookie_path = os.path.join(cookies_dir, cookie_file)
-        print(f"\n🚀 Upload pakai cookie: {cookie_path}")
+        print(f"\n---\n🔄 Mencoba mengunggah dengan akun dari: {cookie_file}")
+        
         try:
+            # Panggil fungsi upload dari library
             upload_video(
-                video_path,
+                filename=video_path,
                 description=description,
                 cookies=cookie_path
             )
-            print(f"✅ Sukses upload dengan cookie: {cookie_file}\n")
+            print(f"✅ Berhasil diunggah menggunakan: {cookie_file}")
         except Exception as e:
-            print(f"❌ Gagal upload pakai {cookie_file}: {e}\n")
+            # Tangani error dan lanjutkan ke cookie berikutnya
+            print(f"❌ Gagal mengunggah dengan {cookie_file}. Alasan: {e}")
+            # `continue` tidak diperlukan secara eksplisit di akhir loop,
+            # karena loop akan otomatis berlanjut.
+
+    print("\n✨ Semua proses unggah TikTok telah selesai.")
+
+if __name__ == '__main__':
+    # Contoh cara menjalankan fungsi ini
+    video_file_path = "path/to/your/video.mp4"
+    video_description = "Ini deskripsi video TikTok saya! #fyp #trending"
+    
+    # Pastikan file video ada sebelum menjalankan
+    if os.path.exists(video_file_path):
+        upload_tiktok(video_path=video_file_path, description=video_description)
+    else:
+        print(f"File video contoh tidak ditemukan. Harap ubah variabel 'video_file_path' di dalam blok if __name__ == '__main__'.")
