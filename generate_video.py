@@ -23,14 +23,14 @@ client = genai.Client(api_key=os.getenv('GEMINI_API'))
 prompt = """
 Write an original short story in the style of a Reddit post from one of the following subreddit communities:
 
-**Choose ONE genre/subreddit style:**
+## **Choose ONE genre/subreddit style:**
 - **r/nosleep** (Horror/Mystery): Psychological tension, supernatural elements, unexplained phenomena
 - **r/confession** (Drama/Personal): Raw honesty, life-changing moments, moral dilemmas
 - **r/tifu** (Comedy): Self-deprecating humor, embarrassing situations, comedic timing
 - **r/wholesomememes** (Heartwarming): Feel-good stories, human kindness, positive outcomes
 - **r/relationships** (Romance/Drama): Relationship dynamics, emotional growth, human connections
 
-## Format Requirements:
+## **Format Requirements:**
 - The story title MUST be written as the first line of the output
 - Title must be 5 to 8 words long and match your chosen genre
 - After the title, start with an appropriate opening for your chosen subreddit:
@@ -41,25 +41,92 @@ Write an original short story in the style of a Reddit post from one of the foll
   - r/relationships: "I never expected this person to change my life..."
 - Do NOT put the title in quotation marks
 
-## Story Requirements:
+## **Story Requirements:**
 - 200-500 words
 - First-person perspective
 - Match the tone and style expectations of your chosen subreddit
 - Build appropriate emotional arc for the genre (suspense, humor, warmth, etc.)
 - **Must have a clear, complete ending with resolution**
 
-## Content Guidelines:
+## **VARIETY ENHANCEMENT ELEMENTS** ⭐
+
+### **Character Diversity Pool** (Pick 1-2 randomly):
+- **Age**: Child, teenager, young adult, middle-aged, elderly, very elderly
+- **Profession**: Student, teacher, retail worker, office worker, artist, healthcare worker, tradesperson, unemployed, retired, freelancer, small business owner
+- **Living situation**: Lives alone, with roommates, with family, in dorms, traveling, homeless, recently moved
+- **Personality traits**: Introverted/extroverted, anxious/confident, optimistic/pessimistic, organized/chaotic, tech-savvy/traditional
+
+### **Setting Variety Wheel** (Choose 1):
+- **Urban**: Apartment building, subway, coffee shop, office building, city park, busy street
+- **Suburban**: Neighborhood, mall, grocery store, local restaurant, community center, garage
+- **Rural**: Small town, farm, forest, lake, mountain cabin, country road
+- **Institutional**: School, hospital, library, gym, church, government building
+- **Transportation**: Bus, train, airplane, car, bike, walking
+- **Digital**: Online gaming, social media, video calls, dating apps, forums
+
+### **Conflict Catalyst Options** (Roll for 1):
+1. **Misunderstanding/Miscommunication**
+2. **Unexpected encounter with stranger**
+3. **Technology malfunction/glitch**
+4. **Weather/natural event**
+5. **Lost/found object**
+6. **Overheard conversation**
+7. **Wrong place, wrong time**
+8. **Family secret revealed**
+9. **Childhood memory triggered**
+10. **Random act of kindness/cruelty**
+11. **Deadline pressure**
+12. **Identity mix-up**
+
+### **Emotional Journey Arcs** (Select based on genre):
+- **Horror**: Comfort → Unease → Fear → Terror → Resolution/Acceptance
+- **Comedy**: Confidence → Mistake → Embarrassment → Panic → Humor/Learning
+- **Drama**: Stability → Conflict → Crisis → Reflection → Growth
+- **Romance**: Loneliness → Meeting → Connection → Challenge → Love
+- **Heartwarming**: Sadness → Encounter → Kindness → Joy → Gratitude
+
+### **Unique Perspective Twists** (Optional enhancement):
+- Unreliable narrator (they misunderstand the situation)
+- Multiple POV shifts within the story
+- Story told through text messages, emails, or social media posts
+- Flashback structure
+- Present tense urgency
+- Stream of consciousness style
+
+### **Cultural/Social Context Variety**:
+- Different cultural backgrounds and traditions
+- Various socioeconomic situations
+- Different family structures
+- Urban vs rural perspectives
+- Generational differences
+- International settings or immigrant experiences
+
+## **Content Guidelines:**
 - Appropriate for social media platforms (TikTok, YouTube, Instagram)
 - Avoid: gore, violence, explicit content, abuse, self-harm, illegal activities
 - Avoid: religious, political, or controversial real-world topics
 - Focus on: psychological elements, human emotions, relatable experiences, universal themes
 
-## Genre-Specific Tips:
-- **Horror/Mystery**: Build tension through atmosphere and psychological elements rather than violence
-- **Comedy**: Use timing, relatability, and self-awareness for humor
-- **Romance**: Focus on emotional connection and character development
-- **Drama**: Explore authentic human experiences and personal growth
-- **Heartwarming**: Highlight human kindness and positive human nature
+## **Genre-Specific Enhancement Tips:**
+- **Horror/Mystery**: Vary the source of fear (technology, nature, psychology, supernatural, social)
+- **Comedy**: Mix physical comedy, situational humor, wordplay, and social awkwardness
+- **Romance**: Explore different types of love (first love, rekindled love, friendship-to-romance, unexpected attraction)
+- **Drama**: Include moral dilemmas, ethical choices, family dynamics, personal growth
+- **Heartwarming**: Show different forms of kindness (strangers, community, family, animals, self-care)
+
+## **Creativity Boosters:**
+- **Random Element Generator**: Include one unexpected detail that doesn't typically belong in your chosen genre
+- **Sensory Focus**: Pick one sense to emphasize throughout the story (sight, sound, smell, touch, taste)
+- **Time Constraint**: Give your story a specific timeframe (24 hours, one week, during a single conversation)
+- **Object Significance**: Choose a mundane object that becomes symbolically important
+- **Reverse Expectation**: Start with one genre expectation, then subvert it
+
+## **Final Variety Check:**
+Before writing, randomly select:
+1. One character trait that's opposite to what you'd normally choose
+2. One setting you've never written about before
+3. One emotional outcome that challenges the typical genre expectations
+4. One cultural or social element different from your usual perspective
 """
 
 response = client.models.generate_content(
@@ -158,7 +225,6 @@ final_clip.write_videofile(
     audio_codec='aac',
     threads=4,
     preset='slow',
-    logger='none'
 )
 print("✅ Video berhasil dibuat:", OUTPUT_FILE)
 
