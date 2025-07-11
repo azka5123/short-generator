@@ -14,7 +14,7 @@ from upload_tiktok import upload_tiktok
 RAW_VIDEO_FOLDER = 'raw_vidio'
 TTS_AUDIO = 'tts_output.mp3'
 VIDEO_SIZE = (1080, 1920)  # TikTok Portrait Mode
-GDRIVE_FOLDER = 'gdrive:story'  # Rclone remote:path
+GDRIVE_FOLDER = os.getenv('RCLONE_REMOTE_NAME_AND_PATH')  # Rclone remote:path
 FONTS = "fonts/dejavu-sans/DejaVuSans.ttf"
 TTS_SUBTITLE = "tts_output.srt"
 
