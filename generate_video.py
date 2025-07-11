@@ -24,11 +24,35 @@ prompt = """
 Write an original short story in the style of a Reddit post from one of the following subreddit communities:
 
 ## **Choose ONE genre/subreddit style:**
+
+### **Personal & Confessional**
 - **r/nosleep** (Horror/Mystery): Psychological tension, supernatural elements, unexplained phenomena
 - **r/confession** (Drama/Personal): Raw honesty, life-changing moments, moral dilemmas
-- **r/tifu** (Comedy): Self-deprecating humor, embarrassing situations, comedic timing
-- **r/wholesomememes** (Heartwarming): Feel-good stories, human kindness, positive outcomes
+- **r/TrueOffMyChest** (Unfiltered Drama): Brutally honest stories, emotional releases, controversial takes
 - **r/relationships** (Romance/Drama): Relationship dynamics, emotional growth, human connections
+- **r/relationship_advice** (Relationship Drama): Complex relationship problems, seeking guidance
+- **r/AskReddit** (Experience/Opinion): Personal experiences shared in response to questions, social discussions
+
+### **Comedy & Fails**
+- **r/tifu** (Comedy): Self-deprecating humor, embarrassing situations, comedic timing
+- **r/pettyrevenge** (Satisfying Comedy): Small-scale revenge stories, satisfying comebacks
+- **r/MaliciousCompliance** (Clever Comedy): Following rules literally with absurd results
+- **r/EntitledParents** (Frustrating Comedy): Dealing with unreasonable, entitled behavior
+- **r/ChoosingBeggars** (Ridiculous Comedy): Unreasonable people making outrageous demands
+
+### **Horror & Mystery**
+- **r/LetsNotMeet** (Real Horror): True scary encounters, dangerous situations avoided
+- **r/TwoSentenceHorror** (Micro Horror): Extremely short, punch-line horror stories
+- **r/shortscarystories** (Compact Horror): Brief but complete horror narratives
+
+### **Justice & Revenge**
+- **r/ProRevenge** (Epic Satisfaction): Long-term, elaborate revenge stories with major consequences
+- **r/AmItheAsshole** (Moral Judgment): Presenting situations for community judgment, moral dilemmas
+
+### **Positive & Inspiring**
+- **r/wholesomememes** (Heartwarming): Feel-good stories, human kindness, positive outcomes
+- **r/HumansBeingBros** (Inspiring): Stories of unexpected kindness, community support
+- **r/UnresolvedMysteries** (Thought-provoking): Intriguing unsolved cases, detective work
 
 ## **Format Requirements:**
 - The story title MUST be written as the first line of the output
@@ -36,13 +60,30 @@ Write an original short story in the style of a Reddit post from one of the foll
 - After the title, start with an appropriate opening for your chosen subreddit:
   - r/nosleep: "I've never told anyone this before..." 
   - r/confession: "I need to get this off my chest..."
+  - r/TrueOffMyChest: "I can't keep this inside anymore..."
   - r/tifu: "This happened yesterday and I'm still cringing..."
   - r/wholesomememes: "Something beautiful happened to me today..."
   - r/relationships: "I never expected this person to change my life..."
+  - r/relationship_advice: "I don't know what to do about..."
+  - r/AskReddit: "You asked about [topic], here's what happened to me..."
+  - r/pettyrevenge: "Someone messed with me, so I got them back..."
+  - r/MaliciousCompliance: "They told me to follow the rules exactly..."
+  - r/EntitledParents: "I couldn't believe what this parent did..."
+  - r/ChoosingBeggars: "This person wanted something for free, then..."
+  - r/LetsNotMeet: "I had the creepiest encounter and I'm still shaken..."
+  - r/TwoSentenceHorror: [No opening - just two sentences]
+  - r/shortscarystories: "This is the scariest thing that ever happened to me..."
+  - r/ProRevenge: "Someone wronged me badly, so I spent months planning..."
+  - r/AmItheAsshole: "I did something and now everyone's mad at me..."
+  - r/HumansBeingBros: "A stranger did something that restored my faith in humanity..."
+  - r/UnresolvedMysteries: "There's something that happened that I can't explain..."
 - Do NOT put the title in quotation marks
 
 ## **Story Requirements:**
-- 200-500 words
+- **Length by subreddit**:
+  - r/TwoSentenceHorror: Exactly 2 sentences
+  - r/shortscarystories: 100-300 words
+  - All others: 200-500 words
 - First-person perspective
 - Match the tone and style expectations of your chosen subreddit
 - Build appropriate emotional arc for the genre (suspense, humor, warmth, etc.)
@@ -52,17 +93,18 @@ Write an original short story in the style of a Reddit post from one of the foll
 
 ### **Character Diversity Pool** (Pick 1-2 randomly):
 - **Age**: Child, teenager, young adult, middle-aged, elderly, very elderly
-- **Profession**: Student, teacher, retail worker, office worker, artist, healthcare worker, tradesperson, unemployed, retired, freelancer, small business owner
-- **Living situation**: Lives alone, with roommates, with family, in dorms, traveling, homeless, recently moved
-- **Personality traits**: Introverted/extroverted, anxious/confident, optimistic/pessimistic, organized/chaotic, tech-savvy/traditional
+- **Profession**: Student, teacher, retail worker, office worker, artist, healthcare worker, tradesperson, unemployed, retired, freelancer, small business owner, gig worker, content creator
+- **Living situation**: Lives alone, with roommates, with family, in dorms, traveling, homeless, recently moved, long-distance relationship
+- **Personality traits**: Introverted/extroverted, anxious/confident, optimistic/pessimistic, organized/chaotic, tech-savvy/traditional, people-pleaser/assertive
 
 ### **Setting Variety Wheel** (Choose 1):
-- **Urban**: Apartment building, subway, coffee shop, office building, city park, busy street
-- **Suburban**: Neighborhood, mall, grocery store, local restaurant, community center, garage
-- **Rural**: Small town, farm, forest, lake, mountain cabin, country road
-- **Institutional**: School, hospital, library, gym, church, government building
-- **Transportation**: Bus, train, airplane, car, bike, walking
-- **Digital**: Online gaming, social media, video calls, dating apps, forums
+- **Urban**: Apartment building, subway, coffee shop, office building, city park, busy street, mall, nightclub
+- **Suburban**: Neighborhood, mall, grocery store, local restaurant, community center, garage, HOA meeting
+- **Rural**: Small town, farm, forest, lake, mountain cabin, country road, gas station
+- **Institutional**: School, hospital, library, gym, church, government building, courthouse
+- **Transportation**: Bus, train, airplane, car, bike, walking, rideshare
+- **Digital**: Online gaming, social media, video calls, dating apps, forums, work-from-home setup
+- **Service/Retail**: Restaurant, store, salon, mechanic shop, bank, post office
 
 ### **Conflict Catalyst Options** (Roll for 1):
 1. **Misunderstanding/Miscommunication**
@@ -77,6 +119,10 @@ Write an original short story in the style of a Reddit post from one of the foll
 10. **Random act of kindness/cruelty**
 11. **Deadline pressure**
 12. **Identity mix-up**
+13. **Neighbor dispute**
+14. **Work drama/office politics**
+15. **Social media incident**
+16. **Customer service gone wrong**
 
 ### **Emotional Journey Arcs** (Select based on genre):
 - **Horror**: Comfort → Unease → Fear → Terror → Resolution/Acceptance
@@ -84,6 +130,8 @@ Write an original short story in the style of a Reddit post from one of the foll
 - **Drama**: Stability → Conflict → Crisis → Reflection → Growth
 - **Romance**: Loneliness → Meeting → Connection → Challenge → Love
 - **Heartwarming**: Sadness → Encounter → Kindness → Joy → Gratitude
+- **Revenge**: Wronged → Anger → Planning → Execution → Satisfaction
+- **Judgment**: Uncertainty → Situation → Decision → Consequences → Reflection
 
 ### **Unique Perspective Twists** (Optional enhancement):
 - Unreliable narrator (they misunderstand the situation)
@@ -92,6 +140,7 @@ Write an original short story in the style of a Reddit post from one of the foll
 - Flashback structure
 - Present tense urgency
 - Stream of consciousness style
+- Update/edit format (common on Reddit)
 
 ### **Cultural/Social Context Variety**:
 - Different cultural backgrounds and traditions
@@ -100,6 +149,8 @@ Write an original short story in the style of a Reddit post from one of the foll
 - Urban vs rural perspectives
 - Generational differences
 - International settings or immigrant experiences
+- Different educational backgrounds
+- Various relationship dynamics (friends, family, romantic, professional)
 
 ## **Content Guidelines:**
 - Appropriate for social media platforms (TikTok, YouTube, Instagram)
@@ -113,6 +164,17 @@ Write an original short story in the style of a Reddit post from one of the foll
 - **Romance**: Explore different types of love (first love, rekindled love, friendship-to-romance, unexpected attraction)
 - **Drama**: Include moral dilemmas, ethical choices, family dynamics, personal growth
 - **Heartwarming**: Show different forms of kindness (strangers, community, family, animals, self-care)
+- **Revenge**: Build satisfying payback that feels proportional and clever
+- **Judgment**: Present clear moral dilemmas where the right answer isn't obvious
+
+## **Subreddit-Specific Style Notes:**
+- **r/AmItheAsshole**: Always end with "So, AITA?" and include enough context for judgment
+- **r/TrueOffMyChest**: More raw and unfiltered than r/confession, often controversial
+- **r/MaliciousCompliance**: Focus on clever literal interpretation of rules
+- **r/ChoosingBeggars**: Include ridiculous demands and entitled behavior
+- **r/ProRevenge**: Build up the offense and make the revenge elaborate and satisfying
+- **r/LetsNotMeet**: Emphasize real danger and genuine fear
+- **r/UnresolvedMysteries**: Present facts objectively, leave questions unanswered
 
 ## **Creativity Boosters:**
 - **Random Element Generator**: Include one unexpected detail that doesn't typically belong in your chosen genre
@@ -127,6 +189,7 @@ Before writing, randomly select:
 2. One setting you've never written about before
 3. One emotional outcome that challenges the typical genre expectations
 4. One cultural or social element different from your usual perspective
+5. One modern element (technology, social media, current trends) that affects the story
 """
 
 response = client.models.generate_content(
