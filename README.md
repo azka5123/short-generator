@@ -90,7 +90,7 @@ nano .env  # atau buka dengan editor teks lainnya
 #### Setup TikTok (Opsional)
 1. Install ekstensi browser [Get cookies.txt LOCALLY](https://github.com/kairi003/Get-cookies.txt-LOCALLY)
 2. Buka TikTok di browser dan login
-3. Klik ekstensi dan export cookies
+3. Klik ekstensi dan export cookies dengan  NetScape cookies format
 4. Simpan file cookies sebagai `cookies.txt` di folder `tiktok_cookies/`
 
 ## Cara Menggunakan
