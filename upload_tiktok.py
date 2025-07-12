@@ -39,7 +39,8 @@ def upload_tiktok(video_path: str, description: str, cookies_dir: str = 'tiktok_
             upload_video(
                 filename=video_path,
                 description=description,
-                cookies=cookie_path
+                cookies=cookie_path,
+                headless=True
             )
             print(f"✅ Berhasil diunggah menggunakan: {cookie_file}")
         except Exception as e:
