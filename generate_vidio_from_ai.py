@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import asyncio
 import edge_tts
 from moviepy import *
@@ -11,11 +12,12 @@ import pysrt
 from upload_tiktok import upload_tiktok
 
 # Config
-RAW_VIDEO_FOLDER = 'raw_vidio'
+load_dotenv()
+RAW_VIDEO_FOLDER = os.getenv('RAW_VIDIO_DIR')
 TTS_AUDIO = 'tts_output.mp3'
 VIDEO_SIZE = (1080, 1920)  # TikTok Portrait Mode
 GDRIVE_FOLDER = os.getenv('RCLONE_REMOTE_NAME_AND_PATH')  # Rclone remote:path
-FONTS = "fonts/dejavu-sans/DejaVuSans.ttf"
+FONTS = os.getenv('FONTS')
 TTS_SUBTITLE = "tts_output.srt"
 
 # 1. Generate story
@@ -122,7 +124,7 @@ Write an original short story in the style of a Reddit post from one of the foll
 13. **Neighbor dispute**
 14. **Work drama/office politics**
 15. **Social media incident**
-16. **Customer service gone wrong**
+16. **Customer service gone wrong
 
 ### **Emotional Journey Arcs** (Select based on genre):
 - **Horror**: Comfort → Unease → Fear → Terror → Resolution/Acceptance
@@ -193,7 +195,7 @@ Before writing, randomly select:
 """
 
 response = client.models.generate_content(
-    model="gemini-2.5-flash",
+    model="gemini-2.5-pro",
     contents=prompt
 )
 
@@ -206,6 +208,113 @@ generated_text = response.text
 # """
 
 lines = generated_text.strip().split('\n')
+title = lines[0].strip()               
+text = title + '\n' + '\n'.join(lines[1:]).strip()
+
+OUTPUT_FILE = 'result/' + title + ".mp4"
+
+# 2. Generate TTS And Subtitle Using pyttsx3
+async def generate_tts(text, filename, subtitle):
+    voices = ["en-US-GuyNeural", "en-US-JennyNeural", "en-US-AriaNeural", "en-IE-ConnorNeural"]  
+    selected_voice = random.choice(voices)
+    print(f"🔊 Selected voice: {selected_voice}") 
+
+    communicate = edge_tts.Communicate(text=text, voice=selected_voice, rate="+15%")
+    submaker = edge_tts.SubMaker()
+
+    # Stream directly to file + submaker
+    with open(filename, "wb") as audio_file:
+        async for chunk in communicate.stream():
+            if chunk["type"] == "audio":
+                audio_file.write(chunk["data"])
+            elif chunk["type"] == "WordBoundary":
+                submaker.feed(chunk)
+
+    # Save SRT subtitle
+    with open(subtitle, "w", encoding="utf-8") as sub_file:
+        sub_file.write(submaker.get_srt())
+    
+asyncio.run(generate_tts(text, TTS_AUDIO,TTS_SUBTITLE))
+audio_clip = AudioFileClip(TTS_AUDIO)
+audio_duration = audio_clip.duration
+
+# 3. Get And Load A Random Video
+video_files = [f for f in os.listdir(RAW_VIDEO_FOLDER) if f.endswith(('.mp4', '.mov', '.avi'))]
+if not video_files:
+    raise Exception("❌ No videos in /raw_vidio/ folder")
+selected_video = os.path.join(RAW_VIDEO_FOLDER, random.choice(video_files))
+bg_clip = VideoFileClip(selected_video)
+
+# 4 Resize To TikTok Portrait Mode (9:16)
+bg_clip = bg_clip.resized(height=VIDEO_SIZE[1], width=VIDEO_SIZE[0])
+
+# 5 Cut Video To Audio Duration
+max_start = bg_clip.duration - audio_duration
+start_time = random.uniform(0, max_start)
+bg_clip = bg_clip.subclipped(start_time, start_time + audio_clip.duration)
+
+# 6. Load Subtitle From SRT File
+subs = pysrt.open(TTS_SUBTITLE)
+
+subtitles = []
+for sub in subs:
+    start = sub.start.ordinal / 1000
+    end = sub.end.ordinal / 1000
+    duration = end - start
+    text = sub.text.replace('\n', ' ')
+
+    txt_clip = TextClip(
+        text=text,
+        font_size=90,
+        font=FONTS,
+        color='white',
+        stroke_color='black',
+        stroke_width=10,
+        method='caption',
+        size=(VIDEO_SIZE[0]-100, None),
+        margin=(50,50)
+    ).with_start(start).with_duration(duration)
+    text_position = ('center',750) 
+              
+    subtitles.append(txt_clip.with_position(text_position))
+
+# 7. Combine All (video + subtitle + audio)
+final_clip = CompositeVideoClip([bg_clip, *subtitles])
+final_clip = final_clip.with_audio(audio_clip)
+
+# 8. Export video
+final_clip.write_videofile(
+    OUTPUT_FILE,
+    fps=30,
+    codec='libx264',
+    audio_codec='aac',
+    threads=4,
+    preset='slow',
+)
+print("✅ Video successfully created:", OUTPUT_FILE)
+
+# 9. Upload To Google Drive via rclone
+try:
+    print("🚀 Uploading to Google Drive...")
+    subprocess.run(['rclone', 'copy', OUTPUT_FILE, GDRIVE_FOLDER], check=True)
+    print("✅ Upload to Google Drive complete.")
+except subprocess.CalledProcessError as e:
+    print("❌ Failed to upload to Google Drive:", e)
+
+# # 10. Upload To YouTube
+deskripsi = "#story #storytime #reddit #redditstories #fyp"
+start_async_upload(OUTPUT_FILE, title, deskripsi)
+# # start_async_upload("result/testing.mp4", "Testing", deskripsi)
+
+# 11. Upload To Tiktok
+full_description = f"{title}\n{deskripsi}"
+upload_tiktok(OUTPUT_FILE, full_description)
+
+#12. Delete Video File, Temporary TTS And Subtitle File
+os.remove(OUTPUT_FILE)
+os.remove(TTS_AUDIO)
+os.remove(TTS_SUBTITLE)
+
 title = lines[0].strip()               
 text = title + '\n' + '\n'.join(lines[1:]).strip()
 

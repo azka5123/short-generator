@@ -1,171 +1,132 @@
-# Generator Video Pendek dan Upload Otomatis
+  # AI-Powered Social Media Video Generator
 
-Aplikasi ini bisa membuat video pendek secara otomatis dan langsung mengunggahnya ke YouTube, Google Drive, dan TikTok.
+  This project automates the creation and uploading of short-form videos for social media platforms like TikTok and YouTube. It can generate content in two ways: by scraping stories from Reddit or by generating original stories using the Gemini AI. The script then combines the story with a random background video, adds AI-generated voice narration and subtitles, and uploads the final product.
 
-## Apa yang Bisa Dilakukan
-- Membuat video pendek secara otomatis
-- Upload video ke YouTube
-- Upload video ke Google Drive  
-- Upload video ke TikTok
-- Menggunakan AI Gemini untuk membuat konten
+  ## Features
 
-## Yang Dibutuhkan
-- Komputer dengan Python
-- Koneksi internet yang stabil
-- Akun Google (untuk YouTube dan Google Drive)
-- Akun TikTok (jika ingin upload ke TikTok)
+  - **Content Sourcing**:
+    - **Reddit Crawler**: Fetches top stories from specified subreddits.
+    - **AI Story Generation**: Creates original, engaging short stories using a detailed AI prompt.
+  - **Content Safety**: Validates stories using Gemini AI to ensure they are safe for posting and won't lead to platform bans.
+  - **Automated Video Production**:
+    - Converts text to speech using Microsoft Edge's TTS for natural-sounding narration.
+    - Automatically generates synchronized subtitles (`.srt`).
+    - Overlays subtitles onto a randomly selected background video from your library.
+    - Formats videos to the standard 9:16 portrait aspect ratio.
+  - **Multi-Platform Uploading**:
+    - Uploads the finished video to multiple TikTok accounts.
+    - Uploads the finished video to multiple YouTube channels.
+    - Backs up the video to a specified Google Drive folder using `rclone`.
+  - **Customization**: Easily configurable through an `.env` file.
 
-## Cara Install dan Setup
+  ## Workflows
 
-### Langkah 1: Download Project
-```bash
-git clone <alamat-project-ini>
-cd <nama-folder-project>
-```
+  There are two main workflows to generate content:
 
-### Langkah 2: Siapkan Environment Python
-```bash
-# Install virtual environment (jika belum ada)
-sudo apt install python3-venv
+  ### 1. Reddit-Based Video Generation
 
-# Buat environment terpisah untuk project ini
-python3 -m venv venv
+  This workflow uses stories scraped from Reddit.
 
-# Aktifkan environment
-source venv/bin/activate  # untuk Linux/Mac
-# atau
-venv\Scripts\activate     # untuk Windows
-```
+  1.  **`python crawl_story.py`**: Scrapes stories from the subreddits defined in your `.env` file and saves them as `.txt` files in the `story/` directory.
+  2.  **`python validate_story.py`**: Checks the stories in the `story/` directory for content safety. Safe stories are moved to the `validate_story/` directory, while unsafe ones are deleted.
+  3.  **`python generate_vidio_from_reddit.py`**: Picks a random story from `validate_story/`, generates a video, uploads it to all configured platforms, and then deletes the temporary files.
 
-### Langkah 3: Install Library yang Dibutuhkan
-```bash
-pip install -r requirements.txt
-```
+  ### 2. AI-Based Video Generation
 
-### Langkah 4: Buat File Konfigurasi
-```bash
-# Salin template konfigurasi
-cp .env-copy .env
+  This workflow generates a new story from scratch using AI.
 
-# Edit file konfigurasi
-nano .env  # atau buka dengan editor teks lainnya
-```
+  -   **`python generate_vidio_from_ai.py`**: Prompts the Gemini AI to write a new story, generates a video from it, uploads it to all platforms, and cleans up the temporary files.
 
-### Langkah 5: Setup Platform Upload
+  ## Setup and Installation
 
-#### Setup YouTube (Opsional)
-1. Buka [Google Cloud Console](https://console.cloud.google.com/)
-2. Buat project baru atau pilih project yang ada
-3. Aktifkan "YouTube Data API v3"
-4. Buat kredensial OAuth 2.0
-5. Download file `client_secret.json`
-6. Pindahkan file tersebut ke folder `yt_credential/`
+  ### Prerequisites
+  -   `python`
+  -   `pip` and `venv`
+  -   `rclone` (for Google Drive backups)
 
-#### Setup Google Drive (Opsional)
-1. Install rclone:
-   ```bash
-   # Untuk Ubuntu/Debian
-   sudo apt install rclone
-   
-   # Atau download dari https://rclone.org/downloads/
-   ```
+  ### 1. Clone the Repository
 
-2. Setup rclone untuk Google Drive:
-   ```bash
-   rclone config
-   ```
+  ```bash
+  git clone https://github.com/azka5123/short-generator.git
+  cd short-generator
+  ```
 
-3. Ikuti langkah-langkah berikut:
-   - Ketik "n" untuk membuat remote baru
-   - Beri nama (misalnya: "gdrive")
-   - Pilih "Google Drive" dari daftar
-   - Ikuti proses login ke Google
-   - Selesaikan setup
+  ### 2. Create a Virtual Environment
 
-4. Test apakah berhasil:
-   ```bash
-   rclone ls gdrive:
-   ```
+  ```bash
+  python -m venv venv
+  source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+  ```
 
-#### Setup TikTok (Opsional)
-1. Install ekstensi browser [Get cookies.txt LOCALLY](https://github.com/kairi003/Get-cookies.txt-LOCALLY)
-2. Buka TikTok di browser dan login
-3. Klik ekstensi dan export cookies dengan  NetScape cookies format
-4. Simpan file cookies sebagai `cookies.txt` di folder `tiktok_cookies/`
+  ### 3. Install Dependencies
 
-## Cara Menggunakan
+  ```bash
+  pip install -r requirements.txt
+  ```
 
-### Menjalankan Program
-```bash
-# Pastikan environment aktif
-source venv/bin/activate
+  ### 4. Configure Environment Variables
 
-# Jalankan program
-python3 generate_video.py
-```
+  Copy the example `.env` file:
 
-## Struktur Folder Project
-```
-project/
-├── generate_video.py       # Program utama
-├── upload_tiktok.py        # Program upload ke TikTok
-├── upload_yt.py            # Program upload ke YouTube
-├── requirements.txt        # Daftar library yang dibutuhkan
-├── .env-copy              # Template konfigurasi
-├── .env                   # File konfigurasi utama (buat sendiri)
-├── yt_credential/         # Folder untuk file YouTube
-│   └── client_secret.json # File kredensial YouTube
-├── tiktok_cookies/        # Folder untuk file TikTok
-│   └── cookies.txt        # File cookies TikTok
-└── venv/                  # Folder environment Python
+  ```bash
+  cp .env-copy .env
+  ```
 
-# File konfigurasi rclone biasanya ada di:
-# ~/.config/rclone/rclone.conf (Linux/Mac)
-# %APPDATA%/rclone/rclone.conf (Windows)
-```
+  Now, edit the `.env` file with your own credentials and settings.
 
-## Pengaturan File .env
-```bash
-# API Key dari Gemini AI
-GEMINI_API_KEY=masukkan_api_key_gemini_disini
+  ### 5. Directory and Credential Setup
 
-# Pengaturan Google Drive
-RCLONE_REMOTE_NAME_AND_PATH=gdrive  # nama remote + path folder
+  -   **Background Videos**: Place your `.mp4` background videos (e.g., gameplay footage, satisfying clips) into the `raw_vidio/` folder.
+  -   **Fonts**: The project uses the DejaVu Sans font located in `fonts/`. You can change the font in the `.env` file.
+  -   **TikTok Cookies**:
+      -   For each TikTok account you want to upload to, get its `cookies.txt` file using a browser extension like "Get cookies.txt".
+      -   Place each `cookies.txt` file inside the `tiktok_cookies/` directory. The script will upload to every account it finds a cookie for.
+  -   **YouTube Credentials**:
+      -   Go to the [Google Cloud Console](https://console.cloud.google.com/) and create a new project.
+      -   Enable the "YouTube Data API v3".
+      -   Create OAuth 2.0 Client IDs credentials and download the `client_secret.json` file.
+      -   Place the `client_secret.json` file in the `yt_credential/` directory.
+      -   The first time you run a script that uploads to YouTube, you will be prompted to authenticate each account in your browser. A `token.json` file will be created for each account in its respective `yt_credential/acc*/` folder.
+  -   **Rclone (Google Drive)**:
+      -   Configure `rclone` with your Google Drive account.
+      -   Set the `RCLONE_REMOTE_NAME_AND_PATH` in your `.env` file to the name of your rclone remote and the path where you want to save the videos (e.g., `gdrive:MyVidioBackup/`).
 
-# Pengaturan YouTube
-YT_ACC=2        # berapa banyak akun YouTube yang akan digunakan
-YT_WORKER=2     # berapa banyak video yang diupload bersamaan
-```
+  ## Usage
 
-## Jika Ada Masalah
+  After completing the setup, you can run the scripts as described in the [Workflows](#workflows) section.
 
-### Masalah Saat Install
-- Pastikan koneksi internet stabil
-- Update pip dengan: `pip install --upgrade pip`
-- Pastikan Python sudah terinstall dengan benar
+  **Example (Reddit Workflow):**
 
-### Masalah Login/Authentication
-- Periksa API key Gemini di file .env
-- Pastikan file `client_secret.json` untuk YouTube sudah benar
-- Periksa apakah cookies TikTok masih valid (login ulang jika perlu)
-- Test koneksi Google Drive: `rclone ls gdrive:`
+  ```bash
+  # Step 1: Get stories
+  python crawl_story.py
+  ```
+  > **Note:** If you have trouble accessing Reddit because of regional blocks, you can use a VPN or run the script with `torsocks`:
+  > `sudo apt install tor`
+  > `torsocks python crawl_story.py`
 
-### Masalah Upload
-- Periksa ukuran file video (jangan terlalu besar)
-- Pastikan format video didukung (MP4 biasanya aman)
-- Periksa kuota API masih tersedia
-- Untuk Google Drive: pastikan rclone sudah dikonfigurasi dengan benar
+  ```bash
+  # Step 2: Validate stories
+  python validate_story.py
 
-### Tips Tambahan
-- Jika upload gagal, coba upload ulang setelah beberapa menit
-- Pastikan semua akun (Google, TikTok) dalam keadaan aktif
-- Backup file penting sebelum menjalankan program
+  # Step 3: Generate and upload video
+  python generate_vidio_from_reddit.py
+  ```
 
-## Kontribusi
-Jika ada saran perbaikan atau menemukan bug, silakan buat issue atau pull request di repository ini.
+  **Example (AI Workflow):**
 
-## Catatan Penting
-- Pastikan menggunakan API key yang valid
-- Jangan share file kredensial ke orang lain
-- Gunakan program ini sesuai dengan ketentuan masing-masing platform
-- Backup data penting sebelum menggunakan program ini
+  ```bash
+  # Generate a story, create a video, and upload it in one go
+  python generate_vidio_from_ai.py
+  ```
+
+  ## File Descriptions
+
+  -   `crawl_story.py`: Fetches stories from Reddit.
+  -   `validate_story.py`: Checks if stories are safe for social media.
+  -   `generate_vidio_from_reddit.py`: Creates a video from a validated Reddit story.
+  -   `generate_vidio_from_ai.py`: Creates a video from an AI-generated story.
+  -   `upload_tiktok.py`: Handles video uploads to TikTok accounts.
+  -   `upload_yt.py`: Handles video uploads to YouTube channels.
+  -   `requirements.txt`: A list of all the Python packages required for this project.
+  -   `.env-copy`: An example environment file.
