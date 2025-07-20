@@ -7,6 +7,7 @@ import shutil
 
 # ========== SETUP ==========
 load_dotenv()
+genai.configure(api_key=os.getenv('GEMINI_API'))
 client = genai.GenerativeModel("gemini-2.5-pro", 
     generation_config={"temperature": 0.2},
     safety_settings={"HARASSMENT": "block_none", "HATE": "block_none"}
