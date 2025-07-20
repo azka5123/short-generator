@@ -13,7 +13,7 @@
 *cookies.txt
 
 /tiktok_profile
-# /story/*
-# /validate_story/*
+/story/*
+/validate_story/*
 
 __pycache__
