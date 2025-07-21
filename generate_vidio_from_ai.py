@@ -265,11 +265,11 @@ for sub in subs:
 
     txt_clip = TextClip(
         text=text,
-        font_size=90,
+        font_size=100,
         font=FONTS,
         color='white',
         stroke_color='black',
-        stroke_width=10,
+        stroke_width=12,
         method='caption',
         size=(VIDEO_SIZE[0]-100, None),
         margin=(50,50)
@@ -290,6 +290,7 @@ final_clip.write_videofile(
     audio_codec='aac',
     threads=4,
     preset='slow',
+    bitrate='8000k',
 )
 print("✅ Video successfully created:", OUTPUT_FILE)
 
