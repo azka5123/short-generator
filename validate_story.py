@@ -23,7 +23,7 @@ def is_safe_content(text):
     Is the following story safe to post on TikTok, YouTube, and Instagram without getting banned?
     Only answer Yes or No.
     if the story use language that is not English, answer no.
-
+    if the story contains any link to external website, answer no.
     Story:
     {text[:3000]}
     """
