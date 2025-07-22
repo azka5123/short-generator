@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import subprocess
+from datetime import datetime
 import re
 
 # ========== SETUP ==========
@@ -38,11 +39,19 @@ new_used_ids = set()
 
 # ========== HELPER FUNCTION ==========
 def extract_linked_post_ids(text):
+    # Extract Reddit links
     reddit_link_regex = r"https?://(?:www\.)?reddit\.com/r/[^/]+/comments/([a-z0-9]{6,})"
     return re.findall(reddit_link_regex, text)
 
 def clean_reddit_links(text):
+    # Remove Reddit links
     return re.sub(r"https?://(?:www\.)?reddit\.com/r/[^/]+/comments/[a-z0-9]{6,}", "", text)
+
+def check_week():
+    #Check if the current week is even or odd.
+    week = datetime.now().isocalendar()[1]
+    return "all" if week % 2 == 0 else "week"
+
 
 # ========== SCRAPE ==========
 for subreddit_name in subreddits:
@@ -50,7 +59,7 @@ for subreddit_name in subreddits:
     count = 0
     print(f"\n🔍 Checking r/{subreddit_name}...")
 
-    for submission in subreddit.top(time_filter='all', limit=max_per_sub):
+    for submission in subreddit.top(time_filter=check_week(), limit=max_per_sub):
         if submission.id in used_ids or submission.stickied:
             continue
         if not submission.is_self or len(submission.selftext.strip().split()) < 200:
