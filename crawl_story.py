@@ -53,7 +53,7 @@ for subreddit_name in subreddits:
     for submission in subreddit.top(time_filter='all', limit=max_per_sub):
         if submission.id in used_ids or submission.stickied:
             continue
-        if not submission.is_self or len(submission.selftext.strip()) < 350:
+        if not submission.is_self or len(submission.selftext.strip().split()) < 200:
             continue
 
         new_used_ids.add(submission.id)
