@@ -12,6 +12,8 @@ load_dotenv()
 client_id = os.getenv('CLIENT_ID_REDDIT')
 client_secret = os.getenv('CLIENT_SECRET_REDDIT')
 user_agent = os.getenv('USER_AGENTS')
+email = os.getenv('EMAIL') 
+password = os.getenv('PASSWORD')
 GDRIVE_FOLDER = os.getenv('RCLONE_REMOTE_NAME_AND_PATH')
 story_dir = Path(os.getenv('STORY_DIR'))
 story_dir.mkdir(exist_ok=True)
@@ -22,6 +24,8 @@ reddit = praw.Reddit(
     client_id=client_id,
     client_secret=client_secret,
     user_agent=user_agent,
+    # username=email, 
+    # password=password
 )
 
 # Load used IDs
