@@ -194,18 +194,18 @@ Before writing, randomly select:
 5. One modern element (technology, social media, current trends) that affects the story
 """
 
-# response = client.models.generate_content(
-#     model="gemini-2.5-pro",
-#     contents=prompt
-# )
+response = client.models.generate_content(
+    model="gemini-2.5-pro",
+    contents=prompt
+)
 
-# generated_text = response.text
+generated_text = response.text
 
-generated_text ="""
-The Whisper in My Closet
-I’ve never told anyone this before. Two weeks ago, every night, 
-I heard a faint whisper coming from my closet—soft, low, like someone calling my name.
-"""
+# generated_text ="""
+# The Whisper in My Closet
+# I’ve never told anyone this before. Two weeks ago, every night, 
+# I heard a faint whisper coming from my closet—soft, low, like someone calling my name.
+# """
 
 lines = generated_text.strip().split('\n')
 title = lines[0].strip()               

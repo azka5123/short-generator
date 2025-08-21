@@ -32,6 +32,8 @@ def upload_tiktok(video_path: str, description: str, cookies_dir: str = 'tiktok_
     # 3. Iterate and upload for each cookie file
     for cookie_file in cookie_files:
         cookie_path = os.path.join(cookies_dir, cookie_file)
+        profile_dir = os.path.join("chrome_profiles", os.path.basename(cookie_file).replace(".txt", ""))
+        os.makedirs(profile_dir, exist_ok=True)
         print(f"\n---\n🔄 Attempting to upload with account from: {cookie_file}")
         
         try:
@@ -40,7 +42,8 @@ def upload_tiktok(video_path: str, description: str, cookies_dir: str = 'tiktok_
                 filename=video_path,
                 description=description,
                 cookies=cookie_path,
-                headless=False
+                headless=False,
+                browser_args=[f"--user-data-dir={profile_dir}"]
             )
             print(f"✅ Successfully uploaded using: {cookie_file}")
         except Exception as e:
