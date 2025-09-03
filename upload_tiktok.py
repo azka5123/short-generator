@@ -1,5 +1,14 @@
 import os
 from tiktok_uploader.upload import upload_video
+import psutil, os, signal, time
+
+def kill_chrome():
+    for proc in psutil.process_iter(['pid', 'name']):
+        if "chrome" in proc.info['name'].lower() or "chromedriver" in proc.info['name'].lower():
+            try:
+                os.kill(proc.info['pid'], signal.SIGTERM)
+            except Exception:
+                pass
 
 def upload_tiktok(video_path: str, description: str, cookies_dir: str = 'tiktok_cookies'):
     """
@@ -32,27 +41,23 @@ def upload_tiktok(video_path: str, description: str, cookies_dir: str = 'tiktok_
     # 3. Iterate and upload for each cookie file
     for cookie_file in cookie_files:
         cookie_path = os.path.join(cookies_dir, cookie_file)
-        # profile_dir = os.path.join("chrome_profiles", os.path.basename(cookie_file).replace(".txt", ""))
-        # os.makedirs(profile_dir, exist_ok=True)
         print(f"\n---\n🔄 Attempting to upload with account from: {cookie_file}")
-        
+
         try:
-            # Call the upload function from the library
             upload_video(
                 filename=video_path,
                 description=description,
                 cookies=cookie_path,
                 headless=False,
             )
-                # browser_args=[f"--user-data-dir={profile_dir}"]
             print(f"✅ Successfully uploaded using: {cookie_file}")
         except Exception as e:
-            # Handle errors and continue to the next cookie
             print(f"❌ Failed to upload with {cookie_file}. Reason: {e}")
-            # `continue` is not explicitly needed at the end of the loop,
-            # as the loop will automatically continue.
+        
+        # Pastikan Chrome/Chromedriver mati sebelum lanjut
+        kill_chrome()
+        time.sleep(2)  # kasih jeda biar proses bener-bener mati
 
-    print("\n✨ All TikTok upload processes have been completed.")
 
 if __name__ == '__main__':
     # Example of how to run this function

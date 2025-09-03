@@ -295,16 +295,16 @@ final_clip.write_videofile(
 print("✅ Video successfully created:", OUTPUT_FILE)
 
 # 9. Upload To Google Drive via rclone
-try:
-    print("🚀 Uploading to Google Drive...")
-    subprocess.run(['rclone', 'copy', OUTPUT_FILE, GDRIVE_FOLDER], check=True)
-    print("✅ Upload to Google Drive complete.")
-except subprocess.CalledProcessError as e:
-    print("❌ Failed to upload to Google Drive:", e)
+# try:
+#     print("🚀 Uploading to Google Drive...")
+#     subprocess.run(['rclone', 'copy', OUTPUT_FILE, GDRIVE_FOLDER], check=True)
+#     print("✅ Upload to Google Drive complete.")
+# except subprocess.CalledProcessError as e:
+#     print("❌ Failed to upload to Google Drive:", e)
 
 # 10. Upload To YouTube
 deskripsi = "#story #storytime #reddit #redditstories #fyp"
-start_async_upload(OUTPUT_FILE, title, deskripsi)
+# start_async_upload(OUTPUT_FILE, title, deskripsi)
 # start_async_upload("result/testing.mp4", "Testing", deskripsi)
 
 # 11. Upload To Tiktok
