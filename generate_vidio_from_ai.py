@@ -304,7 +304,7 @@ except subprocess.CalledProcessError as e:
 
 # 10. Upload To YouTube
 deskripsi = "#story #storytime #reddit #redditstories #fyp"
-start_async_upload(OUTPUT_FILE, title, deskripsi)
+# start_async_upload(OUTPUT_FILE, title, deskripsi)
 # start_async_upload("result/testing.mp4", "Testing", deskripsi)
 
 # 11. Upload To Tiktok

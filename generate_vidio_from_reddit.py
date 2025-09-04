@@ -132,7 +132,7 @@ except subprocess.CalledProcessError as e:
     print("❌ Failed to upload to Google Drive:", e)
 
 # ========== 8. Upload to YouTube ==========
-start_async_upload(OUTPUT_FILE, title, HASHTAGS)
+# start_async_upload(OUTPUT_FILE, title, HASHTAGS)
 
 # ========== 9. Upload to TikTok ==========
 full_description = f"{title}\n{HASHTAGS}"
